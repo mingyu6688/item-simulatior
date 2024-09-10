@@ -9,6 +9,57 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model Users {
+  userId Int @id @default(autoincrement()) @map("userId")
+  email String @unique @map("email")
+  password String @map("password")
+
+  @@map("Users")
+}
+
+model Character {
+  characterId Int @id @default(autoincrement()) @map("characterId")
+  userId Int @map("userId")
+  characterName String @unique @map("characterName")
+  hp Int @map("hp")
+  atk Int @map("atk")
+  money Int @map("money")
+
+  @@map("Character")
+}
+
+model Inventory {
+  inventoryId Int @id @default(autoincrement()) @map("inventoryId")
+  characterId Int @map("characterId")
+
+  @@map("Inventory")
+}
+
+model Equipment {
+  equipmentId Int @id @default(autoincrement()) @map("equipmentId")
+  characterId Int @map("characterId")
+
+  @@map("Equipment")
+}
+
+model Item {
+  itemId Int @id @default(autoincrement()) @map("itemId")
+  itemName String @map("itemName")
+  itemPart String @map("itemPart")
+  hp Int @map("hp")
+  atk Int @map("atk")
+
+  @@map("Item")
+}
+
+model Store {
+  storeId Int @id @default(autoincrement()) @map("storeId")
+  itemId Int @map("itemId")
+  price Int @map("price")
+
+  @@map("Store")
 }

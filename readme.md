@@ -19,3 +19,7 @@ git add .
 git commit -m "readme 추가"
 
 git push
+
+
+
+임시 prisma Schema 작성
