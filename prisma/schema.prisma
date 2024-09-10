@@ -15,21 +15,26 @@ datasource db {
 
 model Users {
   userId Int @id @default(autoincrement()) @map("userId")
-  email String @unique @map("email")
+  id String @unique @map("id")
   password String @map("password")
+
+  characters Characters[]
+  RefreshTokens RefreshTokens?
 
   @@map("Users")
 }
 
-model Character {
+model Characters {
   characterId Int @id @default(autoincrement()) @map("characterId")
   userId Int @map("userId")
   characterName String @unique @map("characterName")
-  hp Int @map("hp")
-  atk Int @map("atk")
-  money Int @map("money")
+  hp Int @default(500) @map("hp")
+  atk Int @default(100) @map("atk")
+  money Int @default(10000) @map("money")
 
-  @@map("Character")
+  user Users @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("Characters")
 }
 
 model Inventory {
@@ -62,4 +67,16 @@ model Store {
   price Int @map("price")
 
   @@map("Store")
+}
+
+model RefreshTokens {
+  tokenId Int @id @default(autoincrement()) @map("tokenId")
+  userId Int @unique @map("userId")
+  token String @map("token")
+  expiresAt DateTime @map("expiresAt")
+  createdAt DateTime @default(now()) @map("createdAt")
+
+  user Users @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("RefreshTokens")
 }
