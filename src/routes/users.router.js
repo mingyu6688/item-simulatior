@@ -124,10 +124,12 @@ router.post('/sign-in', async (req, res, next)=>{
 
   // userId를 .env에 저장된 비밀키로 jwt 암호화
   const token = jwt.sign(
-      {userId: isExistUser.userId},CUSTOM_SECRET_KEY, {expiresIn: '20m'});
+      {userId: isExistUser.userId},CUSTOM_SECRET_KEY, {expiresIn: '1d'});
 
+  // 헤더에 토큰 생성
   // res.cookie('authorization', `Bearer ${token}`);
-  res.header('Authorization', token);
+  res.header('authorization', token);
+
   return res.status(200).json({message: "로그인에 성공하였습니다."});
   } catch(error){
     next(error);

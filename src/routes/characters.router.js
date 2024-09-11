@@ -36,7 +36,7 @@ router.post("/characters/create", authMiddleware, async (req, res, next) => {
 });
 
 // 캐릭터 목록 조회
-router.get("/characters", authMiddleware, async (req, res, next) => {
+router.get("/characters", async (req, res, next) => {
   const characterList = await prisma.characters.findMany({
     select: {
       userId: true,
@@ -51,27 +51,29 @@ router.get("/characters", authMiddleware, async (req, res, next) => {
 });
 
 // 캐릭터 상세 조회
-router.post("/characters", authMiddleware, async (req, res, next) => {
+router.get("/characters/:characterId", authMiddleware, async (req, res, next) => {
   //토큰이 있으면
   const { userId } = req.user;
-  const { characterName } = req.body;
+  const { characterId } = req.params;
 
-  const isExistName = await prisma.characters.findFirst({
-    where: { characterName },
+  console.log(+characterId);
+  const isExistCharId = await prisma.characters.findFirst({
+    where: { characterId: +characterId },
   });
 
-  // 캐릭터명이 존재하는가?
-  if (!isExistName) {
-    return res.status(401).json({ message: "존재하지 않는 캐릭터명입니다." });
+  // 캐릭터 번호가 존재하는가?
+  if (!isExistCharId) {
+    return res.status(401).json({ message: "존재하지 않는 캐릭터 번호입니다." });
   }
 
-  // 캐릭터명이 검색되었다면
+  // 캐릭터 번호가 검색되었다면
   // 로그인한 사람의 캐릭터인가?
-  if (isExistName.userId === userId) {
+  if (isExistCharId.userId === userId) {
     const characterInfo = await prisma.characters.findFirst({
-      where: { characterName },
+      where: { characterId: +characterId },
       select: {
         userId: true,
+        characterId: true,
         characterName: true,
         hp: true,
         atk: true,
@@ -84,9 +86,10 @@ router.post("/characters", authMiddleware, async (req, res, next) => {
   // 다른 사람의 캐릭터인가?
   else {
     const characterInfo = await prisma.characters.findFirst({
-      where: { characterName },
+      where: { characterId: +characterId },
       select: {
         userId: true,
+        characterId: true,
         characterName: true,
         hp: true,
         atk: true,
@@ -120,7 +123,7 @@ router.delete("/characters", authMiddleware, async (req, res, next) => {
   // 삭제 진행
   await prisma.characters.delete({where: {characterName: characterName}});
 
-  return res.status(200).json({data: "캐릭터가 삭제되었습니다."});
+  return res.status(200).json({message: "캐릭터가 삭제되었습니다."});
 });
 
 export default router;

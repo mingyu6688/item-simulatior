@@ -19,7 +19,6 @@ model Users {
   password String @map("password")
 
   characters Characters[]
-  RefreshTokens RefreshTokens?
 
   @@map("Users")
 }
@@ -53,12 +52,14 @@ model Equipment {
 
 model Items {
   itemId Int @id @default(autoincrement()) @map("itemId")
-  item_Code Int @map("item_Code")
-  item_Name String @map("item_Name")
-  item_Part String @map("item_Part")
-  item_Stat String @map("item_Stat")
-  item_Price Int @map("item_Price")
-  @@map("Item")
+  item_Code Int @unique @map("item_Code")
+  item_Name String @unique @map("item_Name")
+  item_Type String? @default("") @map("item_Type")
+  item_Hp Int? @default(0) @map("item_HP")
+  item_Atk Int? @default(0) @map("item_Atk")
+  item_Price Int? @default(500) @map("item_Price")
+  item_Info String? @default("") @db.Text @map("item_Info")
+  @@map("Items")
 }
 
 model Store {
@@ -67,16 +68,4 @@ model Store {
   price Int @map("price")
 
   @@map("Store")
-}
-
-model RefreshTokens {
-  tokenId Int @id @default(autoincrement()) @map("tokenId")
-  userId Int @unique @map("userId")
-  token String @map("token")
-  expiresAt DateTime @map("expiresAt")
-  createdAt DateTime @default(now()) @map("createdAt")
-
-  user Users @relation(fields: [userId], references: [userId], onDelete: Cascade)
-
-  @@map("RefreshTokens")
 }

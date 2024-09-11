@@ -26,3 +26,6 @@ git push
 
 캐릭터 생성 전체조회 상세조회 삭제 - 추가
 
+# API 명세서 작성
+
+https://www.notion.so/API-bab6791e116c4623ac451aa1005acfc6?pvs=4
