@@ -28,8 +28,8 @@ export default async function (req, res, next) {
     // 할당한 쿠키를 = 기준으로 갈라서 authorization과 Bearer~~~~ 로 나누기
     const [auth, content] = cookie.split("=");
 
-    // 헤더에서 authorization을 받아온게 맞는가?
-    if (auth !== 'authorization')
+    // 헤더에서 Authorization을 받아온게 맞는가?
+    if (auth !== 'Authorization')
       throw new Error("요청한 사용자의 토큰이 존재하지 않습니다.");
 
     // 쿠키만 사용한 기존 방식

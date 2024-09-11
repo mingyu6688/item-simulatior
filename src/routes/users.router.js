@@ -126,8 +126,8 @@ router.post('/sign-in', async (req, res, next)=>{
   const token = jwt.sign(
       {userId: isExistUser.userId},CUSTOM_SECRET_KEY, {expiresIn: '20m'});
 
-  res.cookie('authorization', `Bearer ${token}`);
-  res.header('authorization', token);
+  // res.cookie('authorization', `Bearer ${token}`);
+  res.header('Authorization', token);
   return res.status(200).json({message: "로그인에 성공하였습니다."});
   } catch(error){
     next(error);
