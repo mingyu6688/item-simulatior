@@ -51,13 +51,13 @@ model Equipment {
   @@map("Equipment")
 }
 
-model Item {
+model Items {
   itemId Int @id @default(autoincrement()) @map("itemId")
-  itemName String @map("itemName")
-  itemPart String @map("itemPart")
-  hp Int @map("hp")
-  atk Int @map("atk")
-
+  item_Code Int @map("item_Code")
+  item_Name String @map("item_Name")
+  item_Part String @map("item_Part")
+  item_Stat String @map("item_Stat")
+  item_Price Int @map("item_Price")
   @@map("Item")
 }
 

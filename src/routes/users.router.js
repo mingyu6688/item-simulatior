@@ -108,8 +108,10 @@ const CUSTOM_SECRET_KEY = process.env.SECRET_KEY;
 // 로그인
 router.post('/sign-in', async (req, res, next)=>{
   try{
+  //유효성 검증
   const { id, password } = await VaildsigninSchema.validateAsync(req.body);
 
+  //존재하는 아이디?
   const isExistUser = await prisma.users.findFirst({
       where: {id}
   });
@@ -120,10 +122,12 @@ router.post('/sign-in', async (req, res, next)=>{
   if(!(await bcrypt.compare(password, isExistUser.password)))
       return res.status(401).json({message: "비밀번호가 일치하지 않습니다."});
 
+  // userId를 .env에 저장된 비밀키로 jwt 암호화
   const token = jwt.sign(
-      {userId: isExistUser.userId},CUSTOM_SECRET_KEY);
+      {userId: isExistUser.userId},CUSTOM_SECRET_KEY, {expiresIn: '20m'});
 
   res.cookie('authorization', `Bearer ${token}`);
+  res.header('authorization', token);
   return res.status(200).json({message: "로그인에 성공하였습니다."});
   } catch(error){
     next(error);
